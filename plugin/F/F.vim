@@ -38,7 +38,7 @@ function! s:Ff(...)
     let l:file_regex = a:1
     let l:content_match = expand("<cword>")
   else
-    let l:file_regex = '.*.' . expand('%:e')
+    let l:file_regex = '.*\.' . expand('%:e') . '$'
     let l:content_match = expand("<cword>")
   endif
   let l:cmd_output = system('find -E . -type f -regex "'.l:file_regex.'" -exec gawk "BEGIN{c=0}; /'.l:content_match.'/ {printf \"%s %d %s\n\", FILENAME, FNR, \$0; c += 1}; END{print c}" {} +')
