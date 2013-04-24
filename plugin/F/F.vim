@@ -66,7 +66,7 @@ function! s:Fg(...)
   let l:result_list = split(l:cmd_output, '\n')
   call map(l:result_list, 'substitute(v:val, "^\\s\\+", "", "")')
   call map(l:result_list, 'l:current_file_name . " " . v:val')
-  let l:cmd_output = join(l:result_list, '\n')
+  let l:cmd_output = join(l:result_list, '')
 
   if strlen(l:cmd_output) > 0
     call s:ShowInQuickFix(l:cmd_output, '%f\ %l\ %m')
