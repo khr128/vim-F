@@ -72,3 +72,27 @@ function! s:Fg(...)
     call s:ShowInQuickFix(l:cmd_output, '%f\ %l\ %m')
   endif
 endfunction
+
+if !exists('s:f_plugin_path')
+  let s:runtimepaths = &runtimepath . ','
+  while strlen(s:runtimepaths) != 0
+    let s:filepath = substitute(s:runtimepaths, ',.*', '', '') . '/plugin/F'
+    if filereadable(s:filepath . '/vim-st.awk')
+      let s:f_plugin_path = s:filepath
+      break
+    endif
+    let s:runtimepaths = substitute(s:runtimepaths, '[^,]*,', '', '')
+  endwhile
+endif
+
+if !exists("s:vim_st_awk")
+  let s:vim_st_awk = s:f_plugin_path . '/vim-st.awk'
+endif
+
+command! -nargs=* Fs call <SID>Fs(<f-args>)
+function! s:Fs(...)
+  let l:cmd_output = system('curl --silent "http://finance.yahoo.com/q?s=' . a:1 .'" | gawk --re-interval -f ' . s:vim_st_awk)
+  if strlen(l:cmd_output) > 0
+    call s:ShowInQuickFix(l:cmd_output, '%f\ %l\ %m')
+  endif
+endfunction
