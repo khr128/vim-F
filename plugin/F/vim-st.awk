@@ -1,8 +1,12 @@
 BEGIN {
   st_regexp = "[[:digit:]]{1,4}[[:punct:]][[:digit:]]{2}"
   hd_regexp = "time_rtq_ticker|Volume|Prev"
-  RS = "/?span|/?td|/?th"
+  RS = "/?span|/?td|/?th|/?div|/?title"
   FS = "[<>]"
+}
+
+{
+  if (RT == "/title") print $0
 }
 
 $0 ~ hd_regexp {
